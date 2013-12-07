@@ -23,6 +23,14 @@ main() {
         exit 1
     fi
 
+    if [[ $ENCRYPTION && ! $SIGNINCA ]];
+    then
+        echo "Warning: You're trying to build an important CA without a challenge!"
+        echo "This option is only supported for signing-cas"
+        help
+        exit 1
+    fi
+
     if [ $ROOTCA ];
     then
         CFG="$CFGDIR/$CA$CFGEXT"
@@ -129,7 +137,7 @@ help() {
         -d, --debug         Enable bash debug mode
         -h, --help          Shows up this help
         --intermediate-ca   Build an intermediate ca
-        --no-password       Don't protect the private key
+        --no-password       Don't protect the private key with a challenge (only for signing-cas)
         --root-ca           Build a root ca
         --signing-ca        Build a signing ca
         --sign-with         CA used to sign the new CA

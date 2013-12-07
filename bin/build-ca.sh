@@ -64,7 +64,6 @@ main() {
                         awk -F "." -v name="$CANAME" '{print $1name}')
     if [[ $SIGNCA && ! $ROOTCA ]];
     then
-        CACHAIN="true"
         CRT=$DIR/$CADIR/$CA/$CA$CRTEXT
         if [ $INTERMEDIATECA ];
         then
@@ -87,7 +86,7 @@ main() {
     request
     sign
     init_crl
-    if [ $CACHAIN ];
+    if [ ! $ROOTCA ];
     then
         create_ca_chain
     fi

@@ -1,6 +1,12 @@
 #!/bin/bash
 
 #
+# Author: Florian Pelgrim
+# Email: florian.pelgrim@craneworks.de
+# URL: https://github.com/craneworks/pki-manager
+# License: MIT (see LICENSE for more informations)
+# Copyright 2013
+#
 # Helper script for initializing a new CA
 # Builds the complete folder structure
 #

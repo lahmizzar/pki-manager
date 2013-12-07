@@ -62,7 +62,7 @@ main() {
 
     export CANAME=$(echo $(basename $CFG) | \
                         awk -F "." -v name="$CANAME" '{print $1name}')
-    if [ $SIGNCA ];
+    if [[ $SIGNCA && ! $ROOTCA ]];
     then
         CACHAIN="true"
         CRT=$DIR/$CADIR/$CA/$CA$CRTEXT

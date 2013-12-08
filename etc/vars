@@ -35,6 +35,8 @@ OCSPCFG="$CFGDIR/ocsp.cfg"
 SERVERCFG="$CFGDIR/tls-server.cfg"
 TIMESTAMPCFG="$CFGDIR/timestamp.cfg"
 
+# misc
+export PASSWORDSTRENGHT=6 # How many chars a password should have
 ##################
 # Certificate vars
 ##################

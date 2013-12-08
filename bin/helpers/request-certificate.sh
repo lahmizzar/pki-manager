@@ -66,6 +66,7 @@ createCSR() {
     openssl req -new \
         $ENCRYPTION \
         -config $CFG \
+        $PASSWORD \
         -out $CSRFILE \
         -keyout $KEYFILE
     check $?
@@ -92,6 +93,7 @@ help() {
         --dn                When creating a TLS server cert specify here more domain names speerate by coma
         -h, --help          Shows up this help
         --no-password       Don't protect the private key
+        --password-file     Password file
         "
 }
 
@@ -124,6 +126,14 @@ do
             ;;
         --no-password)
             ENCRYPTION="-nodes"
+            shift
+            ;;
+        --password-file)
+            PASSWORD="-passout file:$2"
+            shift 2
+            ;;
+        --password-file=*)
+            PASSWORD="-passout file:{$1#*=}"
             shift
             ;;
         *)

@@ -12,6 +12,7 @@
 
 # Script vars
 SCRIPT=`basename $0`
+PASSWORD="NULL"
 
 
 source ./etc/vars
@@ -25,7 +26,7 @@ main() {
 
     if [[ $ENCRYPTION && ! $SIGNINCA ]];
     then
-        echo "Warning: You're trying to build an important CA without a challenge!"
+        echo "Warning: You're trying to build an important CA without password protection!"
         echo "This option is only supported for signing-cas"
         help
         exit 1
@@ -80,7 +81,41 @@ main() {
         CRT=$DIR/$CADIR/$CA/$CANAME$CRTEXT
     fi
 
-    #read -p ".."
+    if [[ ! $ENCRYPTION && ! $PARANOID ]];
+    then
+        ask_password
+        while [[ "$PASSWORD" != "$PASSWORD2" ]] || [[ "$PASSWORD" = "" ]] || [[ `echo $PASSWORD | wc -m` -lt $PASSWORDSTRENGHT ]];
+        do
+            echo ""
+            if [ "$PASSWORD" = "" ];
+            then
+                echo "Password empty. Try again."
+            elif [ "$PASSWORD" != "$PASSWORD2" ];
+            then
+                echo "Password missmatch. Try again."
+            else
+                echo "Password too weak. Must have at least $PASSWORDSTRENGHT chars. Try again."
+            fi
+            ask_password
+        done
+
+        TEMP=$(tempfile)
+        echo $PASSWORD > $TEMP
+        PASSWD="--password-file $TEMP"
+    fi
+
+    if [ ! $ROOTCA ];
+    then
+        echo ""
+        read -s -p "Enter your password for $TOPCA: " SIGNPASSWORD
+
+        TEMP=$(tempfile)
+        echo $SIGNPASSWORD > $TEMP
+        SIGNPASSWD="--password-file $TEMP"
+    else
+        SIGNPASSWD=$PASSWD
+    fi
+
 
     init
     request
@@ -90,6 +125,8 @@ main() {
     then
         create_ca_chain
     fi
+
+    shred $TEMP
 }
 
 init() {
@@ -98,23 +135,30 @@ init() {
 }
 
 request() {
-    bash $DEBUG ./bin/helpers/request-certificate.sh $ENCRYPTION --ca --cfg $CFG $CA
+    bash $DEBUG ./bin/helpers/request-certificate.sh $PASSWD $ENCRYPTION --ca --cfg $CFG $CA
     check $?
 }
 
 sign() {
-    bash $DEBUG ./bin/helpers/signing-certificate.sh $SCRIPTARG --cfg $TOPCFG $CA
+    bash $DEBUG ./bin/helpers/signing-certificate.sh $SIGNPASSWD $SCRIPTARG --cfg $TOPCFG $CA
     check $?
 }
 
 init_crl() {
-    bash $DEBUG ./bin/helpers/create-crl.sh $CFG $CA
+    bash $DEBUG ./bin/helpers/create-crl.sh $PASSWD $CFG $CA
     check $?
 }
 
 create_ca_chain() {
     bash $DEBUG ./bin/helpers/create-ca-chain.sh $TOP $CRT
     check $?
+}
+
+ask_password() {
+    echo ""
+    read -s -p "Enter a password for $CA: " PASSWORD
+    echo ""
+    read -s -p "Reenter your password: " PASSWORD2
 }
 
 check() {
@@ -137,6 +181,7 @@ help() {
         -h, --help          Shows up this help
         --intermediate-ca   Build an intermediate ca
         --no-password       Don't protect the private key with a challenge (only for signing-cas)
+        --paranoid          Don't store the password in a temp file
         --root-ca           Build a root ca
         --signing-ca        Build a signing ca
         --sign-with         CA used to sign the new CA
@@ -163,6 +208,10 @@ do
             ;;
         --no-password)
             ENCRYPTION="--no-password"
+            shift
+            ;;
+        --paranoid)
+            PARANOID="true"
             shift
             ;;
         --root-ca)

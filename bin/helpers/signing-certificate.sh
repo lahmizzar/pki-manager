@@ -75,6 +75,7 @@ sign() {
 
     openssl $REQ \
         -config $CFG \
+        $PASSWD \
         -in $CSRFILE \
         -out $CRTFILE \
         -extensions $EXTENSION
@@ -118,6 +119,7 @@ help() {
         --client            Sign a client tls certificate
         -h, --help          Shows up this help
         --intermediate-ca   Sign an intermediate ca
+        --password-file     Password file
         --root-ca           Sign a root ca
         --signing-ca        Sign a signing ca
         --server            Sign a server tls certificate
@@ -148,6 +150,14 @@ do
         --intermediate-ca)
             INTERMEDIATECA="true"
             i=$(($i + 1))
+            shift
+            ;;
+        --password-file)
+            PASSWD="-passin file:$2"
+            shift 2
+            ;;
+        --password-file=*)
+            PASSWD="-passin file:${1#*=}"
             shift
             ;;
         --root-ca)

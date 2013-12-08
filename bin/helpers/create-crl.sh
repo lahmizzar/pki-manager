@@ -29,6 +29,7 @@ gen() {
 
     openssl ca -gencrl \
         -config $CFG \
+        $PASSWORD \
         -out $CRLFILE
     check $?
 }
@@ -61,6 +62,7 @@ help() {
         CFG                 Path to config file
         CA                  Name of the CA
         -h, --help          Shows up this help
+        --password-file     Password file
         "
 }
 
@@ -70,6 +72,14 @@ do
         -h|--help)
             help
             exit 0
+            ;;
+        --password-file)
+            PASSWORD="-passin file:$2"
+            shift 2
+            ;;
+        --password-file=*)
+            PASSWORD="-passin file:{$1#*=}"
+            shift
             ;;
         *)
             CFG=$1

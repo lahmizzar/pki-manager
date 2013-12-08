@@ -37,9 +37,9 @@ main() {
         DELFILES="$DIR/$CADIR/$NAME $DIR/$PUBDIR/$NAME.* $DIR/$PUBDIR/$NAME$CACHAINEXT$PKCS7EXT"
     else
         CFG=$CFGDIR/$UNIT/$SIGNCA$CFGEXT
-        CRTFILE=$CERTSDIR/$NAME$CRTEXT
-        export CANME=$SIGNCA
-        DELFILES="$DIR/$CERTS/$NAME.*"
+        CRTFILE=$DIR/$CERTSDIR/$NAME$CRTEXT
+        export CANAME=$SIGNCA
+        DELFILES="$DIR/$CERTSDIR/$NAME.*"
     fi
 
     # Check if reasin RFC conform. If not set set to "superseded

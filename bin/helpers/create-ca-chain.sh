@@ -16,15 +16,22 @@ SCRIPT=`basename $0`
 
 main() {
     CA=$(echo $(basename $CRT) | cut -d "." -f1)
-    OUT=$DIR/$CADIR/$CA/$CA$CACHAINEXT$PEMEXT
+    OUT=$DIR/$CADIR/$CA/$CA$CACHAINEXT$CRTEXT
     PUBOUT=$DIR/$PUBDIR/$CA$CACHAINEXT$PKCS7EXT
+    PEMFILE=$DIR/$CADIR/$CA/$CA$CACHAINEXT$PEMEXT
 
     gen_chain
+    gen_pem
     publish
 }
 
 gen_chain() {
     cat $CRT $TOP > $OUT
+    check $?
+}
+
+gen_pem() {
+    sed -n '/-----BEGIN CERTIFICATE-----/,/-----END CERTIFICATE-----/p' $OUT > $PEMFILE
     check $?
 }
 

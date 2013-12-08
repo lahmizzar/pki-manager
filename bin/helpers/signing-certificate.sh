@@ -25,10 +25,13 @@ main() {
 
     if [[ $SERVER || $CLIENT ]];
     then
+        CA=$(echo `basename $CFG` | cut -d "." -f1)
         CSRFILE="$DIR/$CERTSDIR/$CSR$CSREXT"
         CRTFILE="$DIR/$CERTSDIR/$CSR$CRTEXT"
         PEMFILE="$DIR/$CERTSDIR/$CSR$PEMEXT"
         KEYFILE="$DIR/$CERTSDIR/$CSR$KEYEXT"
+        PEMBUNDLE="$DIR/$CERTSDIR/$CSR$BUNDLEEXT$PEMEXT"
+        CABUNDLE="$DIR/$CADIR/$CA/$CA$CACHAINEXT$PEMEXT"
     else
         CSRFILE="$DIR/$CADIR/$CSR/$CSR$CSREXT"
         CRTFILE="$DIR/$CADIR/$CSR/$CSR$CRTEXT"
@@ -68,6 +71,10 @@ main() {
         export_der
     fi
     create_pem
+    if [[ $SERVER || $CLIENT ]];
+    then
+        create_pem_bundle
+    fi
 }
 
 sign() {
@@ -97,6 +104,13 @@ create_pem() {
 
     sed -n '/-----BEGIN CERTIFICATE-----/,/-----END CERTIFICATE-----/p' $CRTFILE > $PEMFILE
     cat $KEYFILE >> $PEMFILE
+}
+
+create_pem_bundle() {
+    echo "Creating PEM bundle"
+
+    sed -n '/-----BEGIN CERTIFICATE-----/,/-----END CERTIFICATE-----/p' $CRTFILE > $PEMBUNDLE
+    cat $CABUNDLE >> $PEMBUNDLE
 }
 
 check() {

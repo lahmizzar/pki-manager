@@ -28,6 +28,7 @@ export CRLNUMBEREXT="$CRLEXT.srl"
 export CACHAINEXT="-ca-chain"
 export ROOTCAEXT="-root-ca"
 export INTERMEDIATEEXT="-intermediate-ca"
+export BUNDLEEXT="-bundle"
 
 # Files
 CLIENTCFG="$CFGDIR/tls-client.cfg"

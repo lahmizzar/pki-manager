@@ -132,11 +132,11 @@ help() {
         --cfg               Sign CSR with this config file
         --client            Sign a client tls certificate
         -h, --help          Shows up this help
-        --intermediate-ca   Sign an intermediate ca
-        --password-file     Password file
-        --root-ca           Sign a root ca
-        --signing-ca        Sign a signing ca
-        --server            Sign a server tls certificate
+        --intermediate-ca   Sign an intermediate CA
+        --password-file     Password file for decrypting the key
+        --root-ca           Sign a root CA
+        --signing-ca        Sign a signing CA
+        --server            Sign a server TLS certificate
         "
 }
 

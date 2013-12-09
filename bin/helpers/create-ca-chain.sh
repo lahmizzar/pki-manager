@@ -56,10 +56,10 @@ help() {
     echo "
         Usage: $SCRIPT [ARGS] TOP CRT
         
-        Helper script for creating and exporting a ca chain file
+        Helper script for creating and exporting a CA chain file
         
-        CRT                 The path to the crt file for our new chain
-        TOP                 Path for upper crt/ca-chain file 
+        CRT                 Path to the CRT file for our new chain
+        TOP                 Path for upper CRT/CA-chain file 
         -h, --help          Shows up this help
         "
 }

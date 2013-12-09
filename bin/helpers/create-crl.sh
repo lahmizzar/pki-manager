@@ -57,12 +57,12 @@ help() {
     echo "
         Usage: $SCRIPT [ARGS] CFG CA
         
-        Helper script to generate a crl from given config file
+        Helper script to generate a CRL from given config file
         
         CFG                 Path to config file
         CA                  Name of the CA
         -h, --help          Shows up this help
-        --password-file     Password file
+        --password-file     Password file to decrypt the key
         "
 }
 

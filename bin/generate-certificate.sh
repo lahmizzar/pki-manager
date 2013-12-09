@@ -38,10 +38,6 @@ main() {
     then
         CFG=$SERVERCFG
         MODE="--server"
-    elif [ $TIMESTAMP ];
-    then
-        CFG=$TIMESTAMPCFG
-        MODE="--timestamp"
     fi
 
     if [[ ! $SERVER && $DN ]];
@@ -87,7 +83,6 @@ help() {
         --ocsp              Create a OCSP-Signing certificate
         --server            Create a TLS server certificate
         --sign-with         CA to sign with
-        --timestamp         Create a timestamp certificate
         --unit              Unit the certificate belongs to
         "
 }
@@ -140,11 +135,6 @@ do
             ;;
         --server)
             SERVER="true"
-            shift
-            i=$(($i + 1))
-            ;;
-        --timestamp)
-            TIMESTAMP="true"
             shift
             i=$(($i + 1))
             ;;

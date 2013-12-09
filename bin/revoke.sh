@@ -16,7 +16,7 @@ SCRIPT=$0
 source ./etc/vars
 
 main() {
-    if [[ ! $CERT && ! $i -eq 1 ]] || [[ ! $NAME ]] || [[ ! $j -eq 1 ]] || [[ ! $INTERMEDIATECA && ! $SIGNINGCA && ! $UNIT ]];
+    if [[ ! $i -eq 1 ]] || [[ ! $NAME ]] || [[ ! $j -eq 1 ]] || [[ ! $INTERMEDIATECA && ! $SIGNINGCA && ! $UNIT ]];
     then
         help
         exit 1
@@ -98,9 +98,8 @@ help() {
 
         NAME                    Name of the certificate
         -h, --help              Displays this text
-        --cert                  Revoke a certificate
         --intermediate-ca       Revoke a intermediate CA
-        -r, --reason            Revoke reason, must be RFC comform
+        --reason                Revoke reason, must be RFC comform
         --signing-ca            Revoke a signing CA
         --signed-with           Name of CA the to revoked CA has been signed
         --unit                  Unit certificate belongs to
@@ -116,17 +115,12 @@ do
             help
             exit 0
             ;;
-        --cert)
-            CERT="true"
-            i=$(($i + 1))
-            shift
-            ;;
         --intermediate-ca)
             INTERMEDIATECA="true"
             i=$(($i + 1))
             shift
             ;;
-        -r | --reason)
+        --reason)
             REASON=$2
             shift 2
             ;;

@@ -87,13 +87,13 @@ help() {
 
         Helper script for creating a certificate signing request
         
-        CSR                 Name of the csr file
-        --ca                Use this option if you want to create a csr for a CA
+        CSR                 Name of the CSR file
+        --ca                Use this option if you want to create a CSR for a CA
         --cfg               Specify a config file
-        --dn                When creating a TLS server cert specify here more domain names speerate by coma
+        --dn                When creating a TLS server cert specify here more domain names separate by coma
         -h, --help          Shows up this help
         --no-password       Don't protect the private key
-        --password-file     Password file
+        --password-file     Password file to encrypt the key
         "
 }
 

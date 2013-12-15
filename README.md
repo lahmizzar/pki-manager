@@ -1,26 +1,38 @@
 # pki-manager
 Commandline tool for building and managing a 3-tier PKI infrastructure.
 
-## HowTo
-### Create a root CA
+## Example build for Sample Inc
+### Create config files
+There are several config samples in ```doc/configs``` which can be used. But don't forget to edit them.
+*Note that the names of the config files will play an important role in the following steps!*
+
 	cp doc/configs/root-ca.cfg etc/sample.cfg
+	mkdir etc/business-unit-a
+	cp doc/configs/intermediate-ca.cfg etc/business-unit-a/business-unit-a.cfg
+	cp doc/coonfigs/signing-ca.cfg etc/business-unit-a/department-a.cfg
+
+	cp doc/configs/tls-server.cfg etc/tls-server.cfg
+	cp doc/configs/tls-client.cfg etc/tls-client.cfg
+
+Root CA config files are stored in ```etc/```. Create for every business-unit, division or subsidiary a new folder in ```etc/``` and put there the config file for the intermediate CA. It's important that they are named the same! The config file for the signing CA goes now into the same folder of the intermediate CA which should sign it.
+TLS server and client configs are stored beside the root CA.
+
+That was the heaviest part of it. If you followed this step the next steps will be very easy.
+
+### Create a root CA
 	bash bin/build-ca.sh --root-ca sample
 
 ### Create your intermediate CA
-	mkdir etc/sample-bu
-	cp doc/configs/intermediate-ca etc/sample-bu/sample-bu.cfg
-	bash bin/build-ca.sh --sign-with sample --intermediate-ca sample-bu
+	bash bin/build-ca.sh --sign-with sample --intermediate-ca business-unit-a
 
 ### Create a signing CA
-	cp doc/configs/signing-ca.cfg etc/sample-bu/tls-ca.cfg
-	bash bin/build-ca.sh --sign-with sample-bu --signing-ca tls-ca
+	bash bin/build-ca.sh --sign-with business-unit-a --signing-ca department-a
 
-### Create a TLS certificate (eg web server)
-	cp doc/configs/tls-server.cfg etc/tls-server.cfg
-	bash bin/generate-certificate.sh --server --dn www.sample.org --sign-with tls-ca sample.org
+### Create a TLS certificate (eg web server with additional domain names)
+	bash bin/generate-certificate.sh --server --dn www.sample.org --sign-with department-a --unit business-unit-a sample.org
 
 ### Revoke a certificate
-	bash bin/revoke.sh --cert --signed-with tls-ca www.sample.org
+	bash bin/revoke.sh --unit business-unit-a --signed-with department-a sample.org
 
 ## Additional information
 ### CA types:
@@ -56,9 +68,6 @@ Commandline tool for building and managing a 3-tier PKI infrastructure.
  - public - CA files in DER format which are ready for publishing
 
 ### Important notes
- - config files for a root CA are stored in etc/
- - subfolders in etc/ are keeping intermediate CAs and signing CAs
- - the subfolder and the intermediate CA have to be named the same
  - don't use dots in file names eg sample.org.cfg (OpenSSL doesn't like that)
 
 ## Thanks

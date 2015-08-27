@@ -9,7 +9,7 @@ There are several config samples in ```doc/configs``` which can be used. But don
 	cp doc/configs/root-ca.cfg etc/sample.cfg
 	mkdir etc/business-unit-a
 	cp doc/configs/intermediate-ca.cfg etc/business-unit-a/business-unit-a.cfg
-	cp doc/coonfigs/signing-ca.cfg etc/business-unit-a/department-a.cfg
+	cp doc/configs/signing-ca.cfg etc/business-unit-a/department-a.cfg
 
 	cp doc/configs/tls-server.cfg etc/tls-server.cfg
 	cp doc/configs/tls-client.cfg etc/tls-client.cfg
